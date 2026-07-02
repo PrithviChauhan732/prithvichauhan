@@ -35,7 +35,7 @@ export function initShared(): void {
   const clockEl = document.getElementById('clock');
   if (clockEl) {
     const tick = () => {
-      clockEl.textContent = 'Mumbai — ' + new Date().toLocaleTimeString('en-IN',
+      clockEl.textContent = 'Mumbai · ' + new Date().toLocaleTimeString('en-IN',
         { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' });
     };
     tick(); setInterval(tick, 30_000);
@@ -45,10 +45,10 @@ export function initShared(): void {
   const rot = document.getElementById('rot');
   if (rot) {
     const roles = [
-      'inside tier-1 banks.',
-      'from zero, for India.',
-      'through real regulation.',
-      'with the customer in the room.'
+      'built inside tier-1 banks.',
+      'founded from zero, for India.',
+      'shipped under real regulation.',
+      'proven in production, not in decks.'
     ];
     let i = 0;
     setInterval(() => {
