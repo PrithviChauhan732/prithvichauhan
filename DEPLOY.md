@@ -1,27 +1,29 @@
-# prithvichauhan.yorbit.in — personal site + Wonderful demo
+# Deploy — prithvichauhan.yorbit.in
 
-## What's in this folder
-- `index.html` — digital resume (projects, work history, education, skills; links to yorbit.in, caas-ai.vercel.app, rasaynx.com)
-- `wonderful.html` — the UPI dispute-agent demo (linked from the homepage; the Wonderful application email points here directly)
-- `Resume_PrithviChauhan.pdf` — served by the "Download resume" buttons
+## One-time GitHub setup
+1. Push (see below), then on GitHub: repo → Settings → Pages → Source: **GitHub Actions**
+2. Add one DNS record wherever yorbit.in's DNS lives:
+   `CNAME · Name: prithvichauhan · Value: prithvichauhan732.github.io`
+3. Repo → Settings → Pages → Custom domain: prithvichauhan.yorbit.in → tick "Enforce HTTPS" once verified
+   (public/CNAME already carries the domain into every build)
 
-Fully standalone: static files, no build step, no shared code or config with yorbit-frontend / yorbit-backend. Deploying it cannot affect the Yorbit apps.
+Every push to main then auto-builds (type-check + Vite) and deploys.
 
-## Deploy
-1. **Create a separate static project** on whatever hosts yorbit.in (same account is fine — still an isolated project):
-   - Vercel: New Project → drag this folder (or `vercel --prod` inside it) → preset "Other"
-   - Netlify: https://app.netlify.com/drop → drag this folder
-2. **Attach the subdomain**: project settings → Domains → add `prithvichauhan.yorbit.in`
-3. **One additive DNS record** wherever yorbit.in's DNS lives:
-   ```
-   Type: CNAME · Name: prithvichauhan
-   Value: cname.vercel-dns.com   (Vercel)  or  <site>.netlify.app  (Netlify)
-   ```
-   Doesn't touch existing records (root, www, api, …).
+## Push from your machine
+```bash
+cd ~/Desktop/Yorbit/Yorbit/prithvichauhan-site
+rm -f .git/HEAD.lock .git/objects/maintenance.lock   # clear stale locks if present
+git add -A && git commit -m "Vite + TypeScript + Three.js rebuild with experience detail pages"
+git push -u origin main
+```
 
-## Before sharing
-- Optional: in `index.html`, set `CAL_URL` (script block at the bottom) to a Cal.com/Calendly link to turn "Get in touch" into "Book a conversation".
-- Test: https://prithvichauhan.yorbit.in (all three project links, resume download) and https://prithvichauhan.yorbit.in/wonderful.html (run the demo, desktop + phone).
+## Alternative: Vercel
+Import the repo as a new project — Vite is auto-detected (build `npm run build`, output `dist`).
+Add domain prithvichauhan.yorbit.in + the CNAME record Vercel shows.
 
-## The Wonderful email
-The latest Gmail draft's "See it live →" button points to `/wonderful.html`; the signature links the homepage. Attach the resume PDF, delete older duplicate drafts, test-send to yourself, then send to careers@wonderful.ai.
+Either way: isolated project + one additive DNS record. yorbit-frontend / yorbit-backend untouched.
+
+## Test after deploy
+Home: Three.js background, rotating hero line, stat counters, all project links, resume download.
+Detail pages: /experience/{finmechanics,rispri,yorbit,markets,iitb,early}.html + prev/next pager.
+Demo: /wonderful.html (run it). Then finish the Gmail draft (attach resume, delete old drafts, test-send).

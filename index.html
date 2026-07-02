@@ -7,132 +7,11 @@
 <meta name="description" content="Prithvi Chauhan — forward-deployed engineer and founder. IIT Bombay. I ship software where it's hardest to ship: inside the enterprise.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0e0d0b; --bg2:#14120f; --card:#171512; --line:#262320; --line2:#332f2a;
-    --bone:#f0ece3; --muted:#a39d90; --dim:#6b665c;
-    --amber:#ffa94d; --amber-soft:rgba(255,169,77,.14);
-    --serif:'Fraunces',Georgia,serif; --sans:'Space Grotesk',-apple-system,sans-serif;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--bone);font-family:var(--sans);font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  ::selection{background:var(--amber);color:#14120f}
-  a{color:var(--amber);text-decoration:none}
-  .wrap{max-width:980px;margin:0 auto;padding:0 28px}
-
-  /* grain + glow atmosphere */
-  body:before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E")}
-  .glow{position:fixed;width:640px;height:640px;border-radius:50%;pointer-events:none;z-index:0;
-    background:radial-gradient(circle,rgba(255,169,77,.07),transparent 65%);transform:translate(-50%,-50%);transition:opacity .4s}
-
-  /* nav */
-  .nav{position:fixed;top:0;left:0;right:0;z-index:50;backdrop-filter:blur(14px);background:rgba(14,13,11,.72);border-bottom:1px solid var(--line)}
-  .nav .in{max-width:980px;margin:0 auto;padding:16px 28px;display:flex;justify-content:space-between;align-items:center}
-  .nav .logo{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--bone);font-weight:500}
-  .nav .links{display:flex;gap:26px;font-size:13.5px}
-  .nav .links a{color:var(--muted);transition:.2s}
-  .nav .links a:hover{color:var(--bone)}
-  @media(max-width:560px){.nav .links{gap:16px;font-size:12.5px}}
-  #progress{position:absolute;bottom:-1px;left:0;height:1.5px;background:var(--amber);width:0%}
-
-  /* hero */
-  .hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2;padding-top:90px}
-  .hello{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);margin-bottom:26px;font-weight:600}
-  h1{font-family:var(--serif);font-weight:380;font-size:clamp(44px,7.4vw,84px);line-height:1.04;letter-spacing:-.015em;margin-bottom:14px}
-  h1 .it{font-style:italic;color:var(--amber)}
-  .rotator{font-family:var(--serif);font-weight:380;font-size:clamp(26px,3.6vw,42px);line-height:1.2;color:var(--muted);height:1.35em;overflow:hidden;margin-bottom:30px}
-  .rotator span{display:block;transition:transform .55s cubic-bezier(.7,0,.2,1)}
-  .lede{max-width:600px;font-size:17.5px;color:var(--muted);margin-bottom:38px}
-  .lede b{color:var(--bone);font-weight:600}
-  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-  .btn{display:inline-flex;align-items:center;gap:9px;background:var(--bone);color:#14120f !important;padding:15px 30px;border-radius:99px;font-size:15px;font-weight:600;transition:.22s;border:1px solid var(--bone)}
-  .btn:hover{background:var(--amber);border-color:var(--amber);transform:translateY(-2px)}
-  .btn.ghost{background:transparent;color:var(--bone) !important;border:1px solid var(--line2)}
-  .btn.ghost:hover{border-color:var(--amber);color:var(--amber) !important;background:transparent}
-  .scroll-hint{position:absolute;bottom:34px;left:28px;font-size:12px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase}
-  .scroll-hint:after{content:'';display:inline-block;width:34px;height:1px;background:var(--dim);margin-left:10px;vertical-align:middle;animation:stretch 2s infinite}
-  @keyframes stretch{50%{width:60px;background:var(--amber)}}
-
-  /* stats strip */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--bg2)}
-  @media(max-width:720px){.stats{grid-template-columns:1fr 1fr}}
-  .stat{padding:28px 24px;border-right:1px solid var(--line)}
-  .stat:last-child{border-right:none}
-  @media(max-width:720px){.stat:nth-child(2){border-right:none}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}}
-  .stat .n{font-family:var(--serif);font-size:38px;font-weight:420;color:var(--bone)}
-  .stat .n em{font-style:italic;color:var(--amber)}
-  .stat p{font-size:12.5px;color:var(--dim);margin-top:2px;letter-spacing:.04em}
-
-  /* sections */
-  section{padding:110px 0 0;position:relative;z-index:2}
-  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:44px}
-  .sec-head .idx{font-size:12px;color:var(--amber);letter-spacing:.15em}
-  h2{font-family:var(--serif);font-weight:380;font-size:clamp(30px,4vw,44px);letter-spacing:-.01em}
-  h2 .it{font-style:italic;color:var(--amber)}
-
-  /* reveal animation */
-  .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.6,.2,1)}
-  .rv.in{opacity:1;transform:none}
-
-  /* work cards */
-  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  @media(max-width:720px){.cards{grid-template-columns:1fr}}
-  .card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px;overflow:hidden;transition:border-color .25s}
-  .card.wide{grid-column:1/-1}
-  .card:hover{border-color:var(--line2)}
-  .card .spot{position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;
-    background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,169,77,.09),transparent 60%)}
-  .card:hover .spot{opacity:1}
-  .card .tag{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:600;margin-bottom:12px}
-  .card h3{font-family:var(--serif);font-weight:450;font-size:26px;margin-bottom:8px}
-  .card p{font-size:14.5px;color:var(--muted);margin-bottom:18px}
-  .card p b{color:var(--bone);font-weight:600}
-  .card .go{font-size:14px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
-  .card .go .arr{transition:transform .25s}
-  .card:hover .go .arr{transform:translateX(5px)}
-
-  /* experience */
-  .xp{border-top:1px solid var(--line)}
-  .xp-row{display:grid;grid-template-columns:200px 1fr;gap:26px;padding:34px 0;border-bottom:1px solid var(--line);transition:.25s}
-  @media(max-width:680px){.xp-row{grid-template-columns:1fr;gap:8px;padding:26px 0}}
-  .xp-row:hover{background:linear-gradient(90deg,transparent,rgba(255,169,77,.03),transparent)}
-  .xp-when{font-size:12.5px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;padding-top:5px}
-  .xp-body h3{font-size:18px;font-weight:600;margin-bottom:2px}
-  .xp-body .org{font-family:var(--serif);font-style:italic;color:var(--amber);font-size:15.5px;margin-bottom:8px}
-  .xp-body p{font-size:14.5px;color:var(--muted)}
-  .xp-body p b{color:var(--bone);font-weight:600}
-
-  /* education */
-  .edu{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
-  @media(max-width:720px){.edu{grid-template-columns:1fr}}
-  .edu .card p{margin-bottom:0}
-  .edu ul{list-style:none;margin-top:14px}
-  .edu li{font-size:13.5px;color:var(--muted);padding:9px 0;border-top:1px solid var(--line)}
-  .edu li b{color:var(--bone)}
-
-  /* marquee */
-  .marquee{margin-top:110px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;white-space:nowrap;position:relative;z-index:2}
-  .marquee .track{display:inline-block;animation:slide 34s linear infinite}
-  .marquee span{font-family:var(--serif);font-style:italic;font-size:21px;color:var(--dim);margin:0 28px}
-  .marquee span.a{color:var(--amber);font-style:normal;font-family:var(--sans);font-size:13px;letter-spacing:.2em;vertical-align:middle}
-  @keyframes slide{to{transform:translateX(-50%)}}
-
-  /* contact */
-  .contact{text-align:center;padding:130px 0 70px}
-  .contact h2{font-size:clamp(38px,6vw,64px);margin-bottom:20px}
-  .contact p{color:var(--muted);max-width:480px;margin:0 auto 36px}
-  .mail{font-family:var(--serif);font-style:italic;font-size:clamp(19px,3vw,26px);border-bottom:1px solid var(--line2);padding-bottom:4px;transition:.25s}
-  .mail:hover{border-color:var(--amber)}
-
-  footer{border-top:1px solid var(--line);padding:26px 0 40px;position:relative;z-index:2}
-  footer .in{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12.5px;color:var(--dim)}
-</style>
+<script type="module" src="/src/main.ts"></script>
 </head>
 <body>
 
-<div class="glow" id="glow"></div>
+<canvas id="bg3d"></canvas>
 
 <nav class="nav">
   <div class="in">
@@ -141,13 +20,13 @@
       <a href="#work">Work</a>
       <a href="#experience">Experience</a>
       <a href="#education">Education</a>
-      <a href="./Resume_PrithviChauhan.pdf" download>Resume</a>
+      <a href="/Resume_PrithviChauhan.pdf" download>Resume</a>
     </div>
   </div>
   <div id="progress"></div>
 </nav>
 
-<div class="wrap">
+<div class="wrap z">
 
   <div class="hero">
     <div class="hello">Prithvi Chauhan · Mumbai, India</div>
@@ -156,7 +35,7 @@
     <p class="lede">Forward-deployed engineer and founder. A year on-site deploying <b>treasury &amp; risk systems at four tier-1 banks</b>; before and since, building products for India from zero — a mentorship marketplace, a compliance engine for 63M MSMEs, a B2B chemical procurement platform. I like problems where code is half the work and the other half is people, process, and regulation.</p>
     <div class="cta-row">
       <a class="btn" href="mailto:prithvichauhan.iitb@gmail.com">Get in touch <span>→</span></a>
-      <a class="btn ghost" href="./Resume_PrithviChauhan.pdf" download>Resume (PDF)</a>
+      <a class="btn ghost" href="/Resume_PrithviChauhan.pdf" download>Resume (PDF)</a>
     </div>
     <div class="scroll-hint">Scroll</div>
   </div>
@@ -176,6 +55,7 @@
         <h3>Yorbit</h3>
         <p>A full-stack 1-on-1 mentorship platform for India's toughest exams — live video sessions (Agora RTC), E2EE chat, and an AI engine for personalized exam guidance. <b>262 users and 10 paid JEE bookings in the first weeks</b>, entirely organic. Next.js · Node.js · MongoDB.</p>
         <a class="go" href="https://yorbit.in" target="_blank" rel="noopener">yorbit.in <span class="arr">→</span></a>
+        &nbsp;&nbsp;<a class="go" href="/experience/yorbit.html">the story <span class="arr">→</span></a>
       </div>
       <div class="card rv"><div class="spot"></div>
         <div class="tag">Founder · FY 2025–26</div>
@@ -193,7 +73,7 @@
         <div class="tag">Concept demo · 2026</div>
         <h3>An AI CX agent for Indian banking</h3>
         <p>A design walkthrough of a UPI dispute-resolution agent: a Hinglish customer, a failed ₹8,450 payment, and an agent that computes the bank's actual obligation under <b>RBI's TAT circular</b> (T+1 reversal, ₹100/day compensation) instead of promising "3–5 business days" — with a live reasoning-trace panel and monitor view.</p>
-        <a class="go" href="./wonderful.html">Run the demo <span class="arr">→</span></a>
+        <a class="go" href="/wonderful.html">Run the demo <span class="arr">→</span></a>
       </div>
     </div>
   </section>
@@ -201,38 +81,51 @@
   <section id="experience">
     <div class="sec-head rv"><span class="idx">02</span><h2>Where I've <span class="it">worked</span></h2></div>
     <div class="xp">
-      <div class="xp-row rv">
+      <a class="xp-row rv" href="/experience/rispri.html">
         <div class="xp-when">May 2026 — present</div>
         <div class="xp-body">
           <h3>Head of Strategy &amp; Growth</h3>
           <div class="org">Rispri Labs</div>
-          <p>Driving new revenue verticals in environmental tech and B2B chemical procurement — closed ETP/STP plant orders (50–200 KLD) for hospitals, sourced PAC &amp; Alum manufacturers pan-India, built the Rasaynx MVP.</p>
+          <p>New revenue verticals in environmental tech and B2B chemical procurement — ETP/STP plant orders for hospitals, pan-India chemical sourcing, and the Rasaynx MVP.</p>
+          <span class="go">Full story <span class="arr">→</span></span>
         </div>
-      </div>
-      <div class="xp-row rv">
+      </a>
+      <a class="xp-row rv" href="/experience/finmechanics.html">
         <div class="xp-when">Jul 2025 — Apr 2026</div>
         <div class="xp-body">
-          <h3>Forward-Deployed Engineer</h3>
+          <h3>Forward-Deployed Engineer (Associate Consultant)</h3>
           <div class="org">FinMechanics</div>
-          <p>On-site delivery of SaaS treasury &amp; risk systems at <b>four tier-1 banks</b>. Turned a 2-day manual compliance workflow into a <b>10-minute automated one</b> in Java, automated CDS regulatory submissions in Python, deployed cross-asset risk dashboards, led a Java 8→17 migration. I know what shipping through a bank's change-management process actually feels like — the UAT sign-offs, the 11pm calls before go-live.</p>
+          <p>On-site delivery of treasury &amp; risk systems at <b>four tier-1 banks</b> — a 2-day compliance workflow automated to 10 minutes, regulatory pipelines, cross-asset dashboards, and a Java 8→17 modernization.</p>
+          <span class="go">Full story <span class="arr">→</span></span>
         </div>
-      </div>
-      <div class="xp-row rv">
-        <div class="xp-when">Jan — Jul 2025</div>
+      </a>
+      <a class="xp-row rv" href="/experience/yorbit.html">
+        <div class="xp-when">Apr 2026 — present</div>
         <div class="xp-body">
-          <h3>Head of Strategy &amp; Growth (part-time)</h3>
-          <div class="org">Rispri Labs</div>
-          <p>Expanded an accredited environmental testing lab into a multi-vertical platform — shared facilities with 4+ institutes, a co-publication in an IF 7.1 journal, 5× reach growth.</p>
+          <h3>Builder &amp; Founder</h3>
+          <div class="org">Yorbit</div>
+          <p>Shipped a mentorship platform I'd left unshipped for a year — the honest story of builder guilt, counseling season, and 262 users in month one.</p>
+          <span class="go">Full story <span class="arr">→</span></span>
         </div>
-      </div>
-      <div class="xp-row rv">
-        <div class="xp-when">2024</div>
+      </a>
+      <a class="xp-row rv" href="/experience/markets.html">
+        <div class="xp-when">2024 — 2025</div>
         <div class="xp-body">
-          <h3>Quantitative research</h3>
+          <h3>Quant research &amp; derivatives trading</h3>
           <div class="org">WorldQuant · Axxela</div>
-          <p>Signal research for a $20M portfolio at WorldQuant (top 1% in their global quant championship) and US interest-rate derivatives at Axxela — 700+ simulated trades a week. Metrics and evals are my default mode of thought.</p>
+          <p>Top 1% globally in WorldQuant's quant championship; SOFR futures spreads and flys at Axxela with 150+ trades a day.</p>
+          <span class="go">Full story <span class="arr">→</span></span>
         </div>
-      </div>
+      </a>
+      <a class="xp-row rv" href="/experience/early.html">
+        <div class="xp-when">2021 — 2024</div>
+        <div class="xp-body">
+          <h3>The early years</h3>
+          <div class="org">IIM Bangalore · Aqua Vision · Vizuara · Finlatics</div>
+          <p>Water-access economics research, an AI document-querying system, math content in Manim, and a first taste of private equity.</p>
+          <span class="go">Full story <span class="arr">→</span></span>
+        </div>
+      </a>
     </div>
   </section>
 
@@ -242,7 +135,8 @@
       <div class="card rv"><div class="spot"></div>
         <div class="tag">2021 — 2025</div>
         <h3>IIT Bombay</h3>
-        <p>B.S. Economics (Honours) · GPA 8.71/10. Elected General Secretary, Dept. of Economics — pioneered a Minor in Economics across 26 departments, built a 10k+ PAN-IIT alumni network. Institute Organizational Special Mention.</p>
+        <p>B.S. Economics (Honours) · GPA 8.71/10. Elected General Secretary, Dept. of Economics — Institute Organizational Special Mention and Department Roll of Honour.</p>
+        <a class="go" href="/experience/iitb.html">What I did there <span class="arr">→</span></a>
       </div>
       <div class="card rv"><div class="spot"></div>
         <div class="tag">Selected honours</div>
@@ -258,13 +152,13 @@
 
 </div>
 
-<div class="marquee rv">
+<div class="marquee rv z">
   <div class="track" id="track">
-    <span>SaaS deployment</span><span class="a">✦</span><span>API integration</span><span class="a">✦</span><span>workflow automation</span><span class="a">✦</span><span>0→1 product</span><span class="a">✦</span><span>Java</span><span class="a">✦</span><span>Python</span><span class="a">✦</span><span>TypeScript</span><span class="a">✦</span><span>Next.js · Node.js</span><span class="a">✦</span><span>fixed income · FX · derivatives</span><span class="a">✦</span><span>treasury &amp; risk</span><span class="a">✦</span><span>Indian regulatory compliance</span><span class="a">✦</span><span>customer discovery · GTM</span><span class="a">✦</span>
+    <span>SaaS deployment</span><span class="a">✦</span><span>API integration</span><span class="a">✦</span><span>workflow automation</span><span class="a">✦</span><span>0→1 product</span><span class="a">✦</span><span>Java</span><span class="a">✦</span><span>Python</span><span class="a">✦</span><span>TypeScript</span><span class="a">✦</span><span>Next.js · Node.js</span><span class="a">✦</span><span>Three.js</span><span class="a">✦</span><span>fixed income · FX · derivatives</span><span class="a">✦</span><span>treasury &amp; risk</span><span class="a">✦</span><span>Indian regulatory compliance</span><span class="a">✦</span><span>customer discovery · GTM</span><span class="a">✦</span>
   </div>
 </div>
 
-<div class="wrap">
+<div class="wrap z">
   <section class="contact" id="contact">
     <h2 class="rv">Let's build something <span class="it">real.</span></h2>
     <p class="rv">The fastest way to see how I work is the work itself — everything above is live. If something resonates, my inbox is open.</p>
@@ -280,54 +174,5 @@
   </div>
 </footer>
 
-<script>
-// rotating hero line
-const ROLES=["inside tier-1 banks.","from zero, for India.","through real regulation.","with the customer in the room."];
-let ri=0;const rot=document.getElementById('rot');
-setInterval(()=>{rot.style.opacity=0;rot.style.transform='translateY(8px)';
-  setTimeout(()=>{ri=(ri+1)%ROLES.length;rot.textContent=ROLES[ri];
-    rot.style.transition='none';rot.style.transform='translateY(-8px)';
-    requestAnimationFrame(()=>{rot.style.transition='opacity .4s,transform .4s';rot.style.opacity=1;rot.style.transform='none';});
-  },400);},3400);
-
-// scroll reveal
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12});
-document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-
-// animated counters (fire when stats visible)
-function count(el,to,dur,fmt){const t0=performance.now();
-  function f(t){const p=Math.min((t-t0)/dur,1),v=Math.round(to*(1-Math.pow(1-p,3)));
-    el.textContent=fmt?fmt(v):v;if(p<1)requestAnimationFrame(f);}requestAnimationFrame(f);}
-const sio=new IntersectionObserver(es=>{if(es[0].isIntersecting){
-  count(document.getElementById('c1'),4,900);
-  count(document.getElementById('c2'),99.7*10,1400,v=>(v/10).toFixed(1));
-  count(document.getElementById('c3'),4400,1600,v=>v.toLocaleString('en-IN'));
-  count(document.getElementById('c4'),262,1300);
-  sio.disconnect();}},{threshold:.4});
-sio.observe(document.querySelector('.stats'));
-
-// card spotlight follows cursor
-document.querySelectorAll('.card').forEach(c=>{
-  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();
-    c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px');});
-});
-
-// ambient glow follows cursor (desktop)
-const glow=document.getElementById('glow');
-window.addEventListener('mousemove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';});
-
-// scroll progress
-const prog=document.getElementById('progress');
-window.addEventListener('scroll',()=>{const h=document.documentElement;
-  prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';},{passive:true});
-
-// duplicate marquee track for seamless loop
-const track=document.getElementById('track');track.innerHTML+=track.innerHTML;
-
-// mumbai clock
-function clock(){document.getElementById('clock').textContent='Mumbai — '+
-  new Date().toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit'});}
-clock();setInterval(clock,30000);
-</script>
 </body>
 </html>
