@@ -45,10 +45,10 @@ export function initShared(): void {
   const rot = document.getElementById('rot');
   if (rot) {
     const roles = [
-      'built inside tier-1 banks.',
-      'founded from zero, for India.',
-      'shipped under real regulation.',
-      'proven in production, not in decks.'
+      'yorbit.in · 262 users in month one.',
+      'caas.ai · 4,400+ govt schemes indexed.',
+      'rasaynx.com · B2B chemical discovery.',
+      'four tier-1 banks · systems in production.'
     ];
     let i = 0;
     setInterval(() => {
