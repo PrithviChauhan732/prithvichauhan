@@ -49,12 +49,15 @@ h1 .it,h2 .it{font-style:italic;color:var(--amber)}
 /* stats */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--bg2)}
 @media(max-width:720px){.stats{grid-template-columns:1fr 1fr}}
-.stat{padding:28px 24px;border-right:1px solid var(--line)}
+.stat{padding:28px 24px;border-right:1px solid var(--line);display:block;color:inherit;transition:background .22s,border-color .22s}
+a.stat{cursor:pointer}
+a.stat:hover{background:rgba(255,169,77,.06)}
 .stat:last-child{border-right:none}
 @media(max-width:720px){.stat:nth-child(2){border-right:none}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}}
 .stat .n{font-family:var(--serif);font-size:38px;font-weight:420;color:var(--bone)}
 .stat .n em{font-style:italic;color:var(--amber)}
 .stat p{font-size:12.5px;color:var(--dim);margin-top:2px;letter-spacing:.04em}
+.stat-sub{display:block;font-size:11px;color:var(--amber);margin-top:6px;letter-spacing:.04em;opacity:.8}
 
 /* sections */
 section{padding:110px 0 0}
