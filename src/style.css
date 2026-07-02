@@ -41,7 +41,8 @@ h1 .it,h2 .it{font-style:italic;color:var(--amber)}
 .btn:hover{background:var(--amber);border-color:var(--amber);transform:translateY(-2px)}
 .btn.ghost{background:transparent;color:var(--bone) !important;border:1px solid var(--line2)}
 .btn.ghost:hover{border-color:var(--amber);color:var(--amber) !important;background:transparent}
-.scroll-hint{position:absolute;bottom:34px;left:28px;font-size:12px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase}
+.scroll-hint{margin-top:64px;font-size:12px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase}
+@media(max-height:700px){.scroll-hint{display:none}}
 .scroll-hint:after{content:'';display:inline-block;width:34px;height:1px;background:var(--dim);margin-left:10px;vertical-align:middle;animation:stretch 2s infinite}
 @keyframes stretch{50%{width:60px;background:var(--amber)}}
 
@@ -97,8 +98,8 @@ a.xp-row{cursor:pointer}
 .edu{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
 @media(max-width:720px){.edu{grid-template-columns:1fr}}
 .edu .card p{margin-bottom:14px}
-.edu ul{list-style:none;margin-top:6px}
-.edu li{font-size:13.5px;color:var(--muted);padding:9px 0;border-top:1px solid var(--line)}
+.card ul{list-style:none;margin-top:6px}
+.card li{font-size:13.5px;color:var(--muted);padding:9px 0;border-top:1px solid var(--line)}
 
 /* marquee */
 .marquee{margin-top:110px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;white-space:nowrap}
