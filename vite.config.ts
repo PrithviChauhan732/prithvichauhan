@@ -11,7 +11,8 @@ export default defineConfig({
         yorbit: resolve(__dirname, 'experience/yorbit.html'),
         markets: resolve(__dirname, 'experience/markets.html'),
         iitb: resolve(__dirname, 'experience/iitb.html'),
-        early: resolve(__dirname, 'experience/early.html')
+        early: resolve(__dirname, 'experience/early.html'),
+        projects: resolve(__dirname, 'experience/projects.html')
       }
     }
   }

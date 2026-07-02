@@ -128,6 +128,9 @@ footer .in{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;fo
 .prose{max-width:720px}
 .prose h2{font-size:clamp(24px,3vw,32px);margin:52px 0 16px}
 .prose h2:first-child{margin-top:0}
+.prose h2 svg{width:22px;height:22px;stroke:var(--amber);fill:none;stroke-width:1.6;vertical-align:-2px;margin-right:12px}
+.h-when{font-size:11.5px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin:-10px 0 16px}
+.h-when b{color:var(--amber);font-weight:600}
 .prose p{color:var(--muted);font-size:16px;margin-bottom:18px}
 .prose ul{list-style:none;margin:8px 0 18px}
 .prose li{color:var(--muted);font-size:15px;padding:12px 0 12px 26px;border-top:1px solid var(--line);position:relative}
