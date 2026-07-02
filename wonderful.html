@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FDE Application Demo — Prithvi Chauhan × Wonderful</title>
+<style>
+  :root{
+    --bg:#0b0d12; --panel:#12151d; --panel2:#171b25; --border:#232936;
+    --text:#e8eaf0; --muted:#8b93a7; --dim:#5b6375;
+    --accent:#7c6cff; --accent2:#a89bff; --green:#3ddc97; --amber:#ffb347;
+    --red:#ff6b6b; --blue:#5ab8ff; --mono:'SF Mono',ui-monospace,'Cascadia Code',Menlo,Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,sans-serif;line-height:1.5;min-height:100vh}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 24px 60px}
+
+  header{padding:28px 0 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#4a3fd4);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+  .brand h1{font-size:16px;font-weight:700}
+  .brand p{font-size:12px;color:var(--muted)}
+  .applicant{text-align:right;font-size:12px;color:var(--muted)}
+  .applicant b{color:var(--text);font-size:13px;display:block}
+
+  .banner{background:linear-gradient(135deg,rgba(124,108,255,.12),rgba(90,184,255,.06));border:1px solid rgba(124,108,255,.25);border-radius:14px;padding:20px 24px;margin-bottom:22px}
+  .banner h2{font-size:20px;margin-bottom:6px}
+  .banner p{color:var(--muted);font-size:14px;max-width:860px}
+  .banner .tag{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(124,108,255,.4);border-radius:99px;padding:3px 10px;margin-bottom:10px}
+
+  nav{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  nav button{background:var(--panel);border:1px solid var(--border);color:var(--muted);padding:10px 18px;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s}
+  nav button:hover{color:var(--text);border-color:var(--dim)}
+  nav button.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .view{display:none}.view.active{display:block}
+
+  /* ---- demo layout ---- */
+  .demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:900px){.demo-grid{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .card-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+  .card-head h3{font-size:13px;font-weight:700;letter-spacing:.02em}
+  .card-head .sub{font-size:11px;color:var(--dim)}
+  .pill{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;letter-spacing:.05em}
+  .pill.live{background:rgba(61,220,151,.15);color:var(--green)}
+  .pill.idle{background:rgba(139,147,167,.15);color:var(--muted)}
+
+  #chat{height:520px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+  .msg{max-width:82%;padding:10px 14px;border-radius:14px;font-size:13.5px;animation:pop .25s ease}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .msg.user{align-self:flex-end;background:#2a3040;border-bottom-right-radius:4px}
+  .msg.agent{align-self:flex-start;background:linear-gradient(135deg,rgba(124,108,255,.18),rgba(124,108,255,.08));border:1px solid rgba(124,108,255,.25);border-bottom-left-radius:4px}
+  .msg.system{align-self:center;background:none;color:var(--dim);font-size:11.5px;border:1px dashed var(--border);border-radius:8px;padding:5px 12px}
+  .msg .who{font-size:10.5px;font-weight:700;color:var(--accent2);margin-bottom:3px;letter-spacing:.05em}
+  .msg.user .who{color:var(--muted)}
+  .typing{align-self:flex-start;color:var(--dim);font-size:12px;padding:4px 8px}
+  .typing span{animation:blink 1s infinite}
+  @keyframes blink{50%{opacity:.2}}
+
+  #trace{height:520px;overflow-y:auto;padding:12px;font-family:var(--mono);font-size:11.5px;scroll-behavior:smooth;background:var(--panel2)}
+  .tr{border-left:2px solid var(--border);margin:0 0 10px 6px;padding:6px 10px;animation:pop .25s ease}
+  .tr .t-head{display:flex;gap:8px;align-items:center;margin-bottom:2px}
+  .tr .t-type{font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:1px 7px;border-radius:4px}
+  .tr .t-time{color:var(--dim);font-size:10px}
+  .tr .t-body{color:var(--muted);white-space:pre-wrap;word-break:break-word}
+  .tr.reason{border-color:var(--accent)} .tr.reason .t-type{background:rgba(124,108,255,.18);color:var(--accent2)}
+  .tr.tool{border-color:var(--blue)} .tr.tool .t-type{background:rgba(90,184,255,.15);color:var(--blue)}
+  .tr.guard{border-color:var(--amber)} .tr.guard .t-type{background:rgba(255,179,71,.15);color:var(--amber)}
+  .tr.policy{border-color:var(--green)} .tr.policy .t-type{background:rgba(61,220,151,.15);color:var(--green)}
+  .tr.route{border-color:var(--dim)} .tr.route .t-type{background:rgba(139,147,167,.15);color:var(--muted)}
+
+  .controls{display:flex;gap:10px;padding:14px 16px;border-top:1px solid var(--border);align-items:center;flex-wrap:wrap}
+  .btn{background:var(--accent);color:#fff;border:none;padding:10px 22px;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;transition:.15s}
+  .btn:hover{background:#8d7eff}
+  .btn:disabled{background:var(--border);color:var(--dim);cursor:default}
+  .btn.ghost{background:transparent;border:1px solid var(--border);color:var(--muted)}
+  .btn.ghost:hover{color:var(--text)}
+  .speed{font-size:12px;color:var(--dim)}
+
+  /* ---- monitor ---- */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:16px}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
+  .kpi .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+  .kpi .val{font-size:26px;font-weight:800}
+  .kpi .delta{font-size:11.5px;margin-top:4px}
+  .up{color:var(--green)} .down{color:var(--red)}
+  .mon-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+  @media(max-width:900px){.mon-grid{grid-template-columns:1fr}}
+  .barrow{display:flex;align-items:center;gap:10px;padding:7px 16px;font-size:12.5px}
+  .barrow .name{width:190px;color:var(--muted);flex-shrink:0}
+  .barrow .bar{flex:1;height:8px;background:var(--panel2);border-radius:99px;overflow:hidden}
+  .barrow .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--blue))}
+  .barrow .num{width:44px;text-align:right;font-family:var(--mono);font-size:11.5px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;padding:9px 16px;color:var(--dim);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;border-bottom:1px solid var(--border)}
+  td{padding:9px 16px;border-bottom:1px solid var(--border);color:var(--muted)}
+  td:first-child{color:var(--text);font-family:var(--mono);font-size:11.5px}
+  .status{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px}
+  .s-res{background:rgba(61,220,151,.15);color:var(--green)}
+  .s-esc{background:rgba(255,179,71,.15);color:var(--amber)}
+  .s-act{background:rgba(90,184,255,.15);color:var(--blue)}
+
+  /* ---- why ---- */
+  .why{max-width:880px}
+  .why h2{font-size:22px;margin:26px 0 10px}
+  .why h2:first-child{margin-top:0}
+  .why p{color:var(--muted);font-size:14.5px;margin-bottom:12px}
+  .why b{color:var(--text)}
+  .map{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+  @media(max-width:800px){.map{grid-template-columns:1fr}}
+  .map .cell{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .map .cell h4{font-size:12px;color:var(--accent2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+  .map .cell p{font-size:13px;margin:0}
+  .plan{border-left:2px solid var(--accent);padding-left:18px;margin:14px 0}
+  .plan .wk{margin-bottom:14px}
+  .plan .wk h4{font-size:13.5px;margin-bottom:3px}
+  .plan .wk p{font-size:13px;margin:0}
+  .contact{background:linear-gradient(135deg,rgba(124,108,255,.12),rgba(90,184,255,.06));border:1px solid rgba(124,108,255,.25);border-radius:14px;padding:20px 24px;margin-top:26px}
+  .contact p{margin:0;color:var(--text)}
+  .contact a{color:var(--accent2)}
+  footer{margin-top:34px;font-size:11.5px;color:var(--dim);text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo">W</div>
+      <div>
+        <h1>Meridian Bank India &middot; CX Agent <span style="color:var(--dim);font-weight:400">(fictional client)</span></h1>
+        <p>A Wonderful-style deployment concept &middot; Build → Monitor → Optimize</p>
+      </div>
+    </div>
+    <div class="applicant">
+      <b>Prithvi Chauhan</b>
+      FDE Application &middot; Wonderful India<br>
+      IIT Bombay &middot; ex-FinMechanics (FDE, 4 tier-1 banks)
+    </div>
+  </header>
+
+  <div class="banner">
+    <span class="tag">Why you're looking at this</span>
+    <h2>Instead of a cover letter, I built the thing.</h2>
+    <p>This is a self-contained simulation of an agent I'd deploy as an FDE at Wonderful India: a <b style="color:var(--text)">failed-UPI dispute resolution agent</b> for a retail bank, handling a Hinglish customer, grounded in the actual RBI TAT-harmonisation circular, with full reasoning traceability and a monitor view. Press <b style="color:var(--text)">Run demo</b>.</p>
+  </div>
+
+  <nav>
+    <button class="active" data-view="demo">1 · Live Agent + Trace</button>
+    <button data-view="monitor">2 · Monitor</button>
+    <button data-view="why">3 · Why me, why this</button>
+  </nav>
+
+  <!-- ================= DEMO ================= -->
+  <section class="view active" id="view-demo">
+    <div class="demo-grid">
+      <div class="card">
+        <div class="card-head">
+          <div><h3>Customer Chat — WhatsApp channel</h3><div class="sub">Session #MB-2026-448291 · Language: auto (Hinglish)</div></div>
+          <span class="pill idle" id="chat-pill">IDLE</span>
+        </div>
+        <div id="chat"></div>
+        <div class="controls">
+          <button class="btn" id="run">▶ Run demo</button>
+          <button class="btn ghost" id="reset">Reset</button>
+          <span class="speed">~60s scripted session · trace panel runs in sync</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div><h3>Agent Reasoning Trace</h3><div class="sub">Every decision, tool call & guardrail check — mirroring Wonderful's traceability</div></div>
+          <span class="pill idle" id="trace-pill">IDLE</span>
+        </div>
+        <div id="trace"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MONITOR ================= -->
+  <section class="view" id="view-monitor">
+    <div class="kpis">
+      <div class="kpi"><div class="lbl">Resolution rate (no human)</div><div class="val" id="k-res">78.4%</div><div class="delta up">▲ 3.1 pts vs last week</div></div>
+      <div class="kpi"><div class="lbl">Avg handle time</div><div class="val" id="k-aht">1m 42s</div><div class="delta up">▼ 28s vs IVR baseline 11m</div></div>
+      <div class="kpi"><div class="lbl">CSAT (post-session)</div><div class="val" id="k-csat">4.6 / 5</div><div class="delta up">▲ 0.2 vs last week</div></div>
+      <div class="kpi"><div class="lbl">Guardrail interventions</div><div class="val" id="k-guard">312</div><div class="delta" style="color:var(--muted)">0 policy breaches shipped</div></div>
+      <div class="kpi"><div class="lbl">Sessions today</div><div class="val" id="k-sess">12,847</div><div class="delta up">▲ 18% WoW</div></div>
+    </div>
+    <div class="mon-grid">
+      <div class="card">
+        <div class="card-head"><h3>Intent mix — last 24h</h3><span class="sub">by session volume</span></div>
+        <div style="padding:10px 0">
+          <div class="barrow"><span class="name">Failed UPI / debit dispute</span><div class="bar"><i style="width:86%"></i></div><span class="num">31%</span></div>
+          <div class="barrow"><span class="name">Card block / reissue</span><div class="bar"><i style="width:52%"></i></div><span class="num">19%</span></div>
+          <div class="barrow"><span class="name">KYC / re-KYC status</span><div class="bar"><i style="width:44%"></i></div><span class="num">16%</span></div>
+          <div class="barrow"><span class="name">Loan EMI queries</span><div class="bar"><i style="width:33%"></i></div><span class="num">12%</span></div>
+          <div class="barrow"><span class="name">Fixed deposit / rates</span><div class="bar"><i style="width:25%"></i></div><span class="num">9%</span></div>
+          <div class="barrow"><span class="name">Branch / other</span><div class="bar"><i style="width:36%"></i></div><span class="num">13%</span></div>
+        </div>
+        <div class="card-head" style="border-top:1px solid var(--border)"><h3>Language mix</h3><span class="sub">auto-detected</span></div>
+        <div style="padding:10px 0 16px">
+          <div class="barrow"><span class="name">Hinglish</span><div class="bar"><i style="width:78%"></i></div><span class="num">42%</span></div>
+          <div class="barrow"><span class="name">English</span><div class="bar"><i style="width:65%"></i></div><span class="num">35%</span></div>
+          <div class="barrow"><span class="name">Hindi (Devanagari)</span><div class="bar"><i style="width:28%"></i></div><span class="num">15%</span></div>
+          <div class="barrow"><span class="name">Marathi · Tamil · Telugu</span><div class="bar"><i style="width:15%"></i></div><span class="num">8%</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Recent sessions</h3><span class="sub">live feed</span></div>
+        <table id="sess-table">
+          <thead><tr><th>Session</th><th>Intent</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>#448291</td><td>UPI dispute</td><td><span class="status s-act" id="demo-row">ACTIVE</span></td></tr>
+            <tr><td>#448290</td><td>Card reissue</td><td><span class="status s-res">RESOLVED</span></td></tr>
+            <tr><td>#448289</td><td>Re-KYC status</td><td><span class="status s-res">RESOLVED</span></td></tr>
+            <tr><td>#448288</td><td>EMI moratorium</td><td><span class="status s-esc">ESCALATED</span></td></tr>
+            <tr><td>#448287</td><td>UPI dispute</td><td><span class="status s-res">RESOLVED</span></td></tr>
+            <tr><td>#448286</td><td>FD premature closure</td><td><span class="status s-res">RESOLVED</span></td></tr>
+            <tr><td>#448285</td><td>Fraud report</td><td><span class="status s-esc">ESCALATED</span></td></tr>
+          </tbody>
+        </table>
+        <div style="padding:14px 16px;font-size:12px;color:var(--dim)">Escalations route to human queue with full trace attached — the agent hands over context, not just the customer.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHY ================= -->
+  <section class="view" id="view-why">
+    <div class="why">
+      <h2>Why this exact demo</h2>
+      <p>Wonderful India's launch post emphasized <b>localized solutions, languages, and a local governance &amp; compliance framework</b>. So I picked the highest-volume, most compliance-sensitive CX workflow in Indian retail banking: failed UPI transactions. The guardrail isn't decorative — it encodes <b>RBI's TAT harmonisation circular (DPSS.CO.PD No.629, Sept 2019)</b>: auto-reversal by T+1 for failed UPI debits, ₹100/day compensation beyond that. The agent doesn't just apologize — it computes the bank's actual regulatory obligation and acts on it.</p>
+
+      <h2>Mapping this to what I've actually done</h2>
+      <div class="map">
+        <div class="cell"><h4>Deployed inside banks — as an FDE</h4><p>At <b>FinMechanics</b> I was a Forward-Deployed Engineer across <b>4 tier-1 banks</b> (treasury &amp; risk, FmConverge): compressed a 2-day MRCC compliance workflow to <b>&lt;10 minutes</b> in Java, automated CDS regulatory submissions in Python, led a Java 8→17 migration. I know what shipping inside a bank's change-management process actually takes.</p></div>
+        <div class="cell"><h4>Indian compliance, at data scale</h4><p>Founded <b>CaaS.ai</b> — indexed <b>4,400+ central &amp; state government schemes</b> and 200+ obligations into a searchable compliance engine for India's 63M MSMEs. Encoding Indian regulation into software is a thing I do for fun.</p></div>
+        <div class="cell"><h4>0→1 product, full-stack + AI</h4><p>Founded <b>Yorbit</b> (Next.js, Node.js, Agora RTC, E2EE chat, AI exam-guidance engine): <b>262 users in month 1</b>, 10 paid JEE bookings in 15 days, fully organic. I ship complete products, not proofs of concept.</p></div>
+        <div class="cell"><h4>Quantitative rigor</h4><p><b>Top 1% globally</b> in WorldQuant's International Quant Championship (30k+ participants); optimized signals for a $20M portfolio, Sharpe 2.08. Evals, metrics, and regression-catching are native to how I work — which is exactly Wonderful's Optimize loop.</p></div>
+      </div>
+
+      <h2>What I'd do in my first 30 days at Wonderful India</h2>
+      <div class="plan">
+        <div class="wk"><h4>Week 1 — Embed &amp; map</h4><p>On-site with the customer. Map the top-10 CX intents by volume × cost, the systems of record behind each (CBS, CRM, NPCI rails), and the compliance constraints per intent. Output: a scoped deployment plan with a measurable P&amp;L target.</p></div>
+        <div class="wk"><h4>Weeks 2–3 — Ship the wedge use case</h4><p>Build the highest-ROI agent first (likely a dispute/status workflow like this demo) on Wonderful's platform: instructions, skills for core-banking lookups, guardrails encoding the relevant RBI/IRDAI/TRAI rules, evals from real historical transcripts before go-live.</p></div>
+        <div class="wk"><h4>Week 4 — Production + compounding</h4><p>Deploy behind a canary, watch the Monitor dashboards live, tune from traces, hand business teams the levers. Then reuse every skill and integration for use case #2 — the compounding loop Wonderful sells is the loop I want to operate.</p></div>
+      </div>
+
+      <div class="contact">
+        <p><b>Prithvi Chauhan</b> — applying for Forward Deployed Engineer, Wonderful India (open to Deployment Strategist).<br>
+        📧 <a href="mailto:prithvichauhan.iitb@gmail.com">prithvichauhan.iitb@gmail.com</a> &nbsp;·&nbsp; B.S. Economics (Hons), IIT Bombay · GPA 8.71 &nbsp;·&nbsp; Resume attached to this email.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>Built by Prithvi Chauhan as an application artifact for Wonderful India · Meridian Bank is fictional; no real customer data anywhere in this file · July 2026</footer>
+</div>
+
+<script>
+// ---------- tabs ----------
+document.querySelectorAll('nav button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('view-'+b.dataset.view).classList.add('active');
+  };
+});
+
+// ---------- script of the session ----------
+// each step: {d: delay ms, chat:{who,type,text} | trace:{cls,type,body}}
+const SCRIPT=[
+ {d:400, trace:{cls:'route',type:'session',body:'channel=whatsapp · session #MB-2026-448291 opened\nlanguage_detector: warming'}},
+ {d:900, chat:{type:'user',who:'CUSTOMER',text:'Hi, maine kal raat Croma pe ₹8,450 ka UPI payment kiya tha, transaction failed dikha raha hai lekin paise account se cut gaye. Refund kab milega?? Bahut urgent hai.'}},
+ {d:700, trace:{cls:'route',type:'routing',body:'classification → fast model (latency budget 300ms)\nresolution reasoning → frontier model\n(model-agnostic routing, per Wonderful infra)'}},
+ {d:800, trace:{cls:'reason',type:'intent',body:'intent = failed_upi_debit_dispute   conf 0.97\nlanguage = hinglish (hi-en code-mix)  → respond in kind\nsentiment = frustrated (0.71) · urgency = high\nentities: amount=₹8,450 · merchant≈"Croma" · date≈yesterday'}},
+ {d:800, trace:{cls:'guard',type:'guardrail',body:'PII policy: mask account/VPA in logs ✓\nscope check: dispute handling IN scope; investment advice would be OUT ✓\ntone policy: no promises beyond regulatory entitlement ✓'}},
+ {d:1100, chat:{type:'agent',who:'MERIDIAN ASSIST',text:'Namaste! Main samajh sakta hoon, paise cut jaana stressful hota hai — main abhi check karta hoon. 🙏 Pehle ek quick verification: aapke registered mobile par OTP bheja hai, please share kijiye.'}},
+ {d:900, chat:{type:'user',who:'CUSTOMER',text:'482913'}},
+ {d:600, trace:{cls:'tool',type:'tool call',body:'verify_otp(session, otp=•••••) → { verified: true, customer_id: "MB••••7823" }'}},
+ {d:700, trace:{cls:'tool',type:'tool call',body:'fetch_transactions(customer="MB••••7823", days=2, rail="UPI")\n→ TXN 6194…D2 | ₹8,450.00 | 01-Jul 21:14 IST\n   payee_vpa: croma.rzp@••••\n   debit: SUCCESS · beneficiary credit: FAILED\n   npci_status: DEBIT_REVERSAL_PENDING'}},
+ {d:900, trace:{cls:'policy',type:'policy',body:'retrieve: RBI DPSS.CO.PD No.629/02.01.014/2019-20\n"Harmonisation of TAT & customer compensation, failed txns"\n→ UPI: acct debited, beneficiary not credited\n→ auto-reversal deadline: T+1 = 02-Jul 21:14 IST\n→ compensation: ₹100/day beyond T+1, auto-credited'}},
+ {d:800, trace:{cls:'reason',type:'reasoning',body:'now = 02-Jul 14:32 IST → T+1 window still open (6h 42m left)\nBUT npci_status already REVERSAL_PENDING\n→ best action: file dispute proactively, set T+1 watcher,\n  pre-register compensation trigger, give customer the exact\n  regulatory timeline instead of a vague "3–5 business days"'}},
+ {d:1300, chat:{type:'agent',who:'MERIDIAN ASSIST',text:'Verify ho gaya, thank you! ✅ Mujhe transaction mil gayi: ₹8,450, kal raat 9:14 baje, Croma. Aapka debit hua hai lekin merchant ko credit fail hua — reversal NPCI ke through already process ho raha hai.\n\nRBI ke rules ke hisaab se aisi failed UPI transaction ka paisa aaj raat 9:14 baje tak automatically wapas aana chahiye (T+1). Maine dispute reference MB-DR-77419 file kar diya hai aur is transaction par watcher laga diya hai.'}},
+ {d:1100, chat:{type:'user',who:'CUSTOMER',text:'Aur agar aaj raat tak nahi aaya toh? Pichli baar 1 week lag gaya tha 😤'}},
+ {d:700, trace:{cls:'reason',type:'reasoning',body:'customer cites prior bad experience → trust-building moment\nstate the compensation entitlement explicitly (₹100/day)\n+ offer proactive WhatsApp updates instead of making\n  customer chase the bank'}},
+ {d:600, trace:{cls:'tool',type:'tool call',body:'create_watcher(txn="6194…D2", fire_at="02-Jul 21:15 IST",\n  on_fail=["auto_escalate_L2", "register_compensation(₹100/day)",\n  "notify_customer(whatsapp)"]) → watcher_id: W-90218'}},
+ {d:1300, chat:{type:'agent',who:'MERIDIAN ASSIST',text:'Bilkul fair sawaal. Agar aaj raat 9:14 tak refund nahi aata, toh RBI ke niyam ke according aapko ₹100 per day compensation milta hai — aur woh maine abhi se register kar diya hai, aapko claim karne ki zaroorat nahi.\n\nMain aapko WhatsApp par hi update bhejta rahunga — refund aate hi confirmation, ya 9:14 ke baad automatically ek senior team member ke paas escalate ho jayega, poori history ke saath. Aapko dobara explain nahi karna padega. 😊'}},
+ {d:1000, chat:{type:'user',who:'CUSTOMER',text:'Ok great, yeh toh pehle se kaafi better hai. Thank you!'}},
+ {d:600, trace:{cls:'reason',type:'sentiment',body:'sentiment: frustrated (0.71) → satisfied (0.12)\nresolution: self-served, no human handoff\nAHT: 1m 38s · compliance actions: 2 (dispute + comp. registration)'}},
+ {d:900, chat:{type:'agent',who:'MERIDIAN ASSIST',text:'Khushi hui madad karke! 🙏 Reference: MB-DR-77419. Aapko updates milte rahenge. Kuch aur chahiye ho toh main yahin hoon.'}},
+ {d:600, chat:{type:'system',text:'Session resolved · CSAT prompt sent · full trace archived for audit'}},
+ {d:500, trace:{cls:'route',type:'session',body:'session closed → outcome=RESOLVED\ntrace persisted (audit-ready) · eval hooks: TAT-accuracy ✓,\nlanguage-consistency ✓, no-overpromise guardrail ✓'}}
+];
+
+const chat=document.getElementById('chat'), trace=document.getElementById('trace');
+const runBtn=document.getElementById('run'), resetBtn=document.getElementById('reset');
+let timers=[], t0=0;
+
+function ts(){const s=((Date.now()-t0)/1000);return s.toFixed(1)+'s';}
+function addChat(m){
+  if(m.type==='system'){const d=document.createElement('div');d.className='msg system';d.textContent=m.text;chat.appendChild(d);}
+  else{
+    const d=document.createElement('div');d.className='msg '+m.type;
+    d.innerHTML='<div class="who">'+m.who+'</div>'+m.text.replace(/\n/g,'<br>');
+    chat.appendChild(d);
+  }
+  chat.scrollTop=chat.scrollHeight;
+}
+function addTrace(e){
+  const d=document.createElement('div');d.className='tr '+e.cls;
+  d.innerHTML='<div class="t-head"><span class="t-type">'+e.type+'</span><span class="t-time">+'+ts()+'</span></div><div class="t-body"></div>';
+  d.querySelector('.t-body').textContent=e.body;
+  trace.appendChild(d);trace.scrollTop=trace.scrollHeight;
+}
+function showTyping(){
+  const d=document.createElement('div');d.className='typing';d.id='typing';
+  d.innerHTML='Meridian Assist is typing <span>●</span><span style="animation-delay:.2s">●</span><span style="animation-delay:.4s">●</span>';
+  chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
+}
+function hideTyping(){const t=document.getElementById('typing');if(t)t.remove();}
+
+function run(){
+  reset();t0=Date.now();
+  runBtn.disabled=true;
+  document.getElementById('chat-pill').className='pill live';document.getElementById('chat-pill').textContent='LIVE';
+  document.getElementById('trace-pill').className='pill live';document.getElementById('trace-pill').textContent='STREAMING';
+  let acc=0;
+  SCRIPT.forEach((step,i)=>{
+    acc+=step.d;
+    if(step.chat&&step.chat.type==='agent'){
+      timers.push(setTimeout(showTyping,acc-Math.min(700,step.d-50)));
+    }
+    timers.push(setTimeout(()=>{
+      hideTyping();
+      if(step.chat)addChat(step.chat);
+      if(step.trace)addTrace(step.trace);
+      if(i===SCRIPT.length-1)finish();
+    },acc));
+  });
+}
+function finish(){
+  runBtn.disabled=false;runBtn.textContent='↺ Run again';
+  document.getElementById('chat-pill').className='pill idle';document.getElementById('chat-pill').textContent='RESOLVED';
+  document.getElementById('trace-pill').className='pill idle';document.getElementById('trace-pill').textContent='ARCHIVED';
+  const row=document.getElementById('demo-row');
+  if(row){row.className='status s-res';row.textContent='RESOLVED';}
+}
+function reset(){
+  timers.forEach(clearTimeout);timers=[];
+  chat.innerHTML='';trace.innerHTML='';hideTyping();
+  runBtn.disabled=false;runBtn.textContent='▶ Run demo';
+  document.getElementById('chat-pill').className='pill idle';document.getElementById('chat-pill').textContent='IDLE';
+  document.getElementById('trace-pill').className='pill idle';document.getElementById('trace-pill').textContent='IDLE';
+  const row=document.getElementById('demo-row');
+  if(row){row.className='status s-act';row.textContent='ACTIVE';}
+}
+runBtn.onclick=run;resetBtn.onclick=reset;
+
+// gentle idle hint in chat
+addChat({type:'system',text:'Press “Run demo” to start the scripted session — the trace panel on the right will stream in sync.'});
+</script>
+</body>
+</html>
